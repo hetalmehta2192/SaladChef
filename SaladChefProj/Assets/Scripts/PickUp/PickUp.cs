@@ -28,6 +28,7 @@ public class PickUp:PickUpVeggie
 
 	public enum State
 	{
+		Ideal,
 		Chopping,
 		Chopped,
 		Wait
