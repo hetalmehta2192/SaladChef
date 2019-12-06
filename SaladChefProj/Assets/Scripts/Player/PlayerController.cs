@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.AI;
-
+public PlayerName{A,B}
 [Serializable]
 public class PlayerController:MonoBehaviour
 {
+	public PlayerName pName;
 	public Score scoreObj;
 	public InputManager inputObj;
+	public PlayerTimer timerObj;
 	public List<PickUp> pickUps;
 	private NavMeshAgent agent;
 	private int pickupChopIndex;
@@ -69,6 +71,9 @@ public class PlayerController:MonoBehaviour
 				PrepareChopping ();
 			}
 			if (colObj.CompareTag ("Bin")) {			
+				PrepareCleaning ();
+			}
+			if (colObj.CompareTag ("PowerUp")) {			
 				PrepareCleaning ();
 			}
 		}
