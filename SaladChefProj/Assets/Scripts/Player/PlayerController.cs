@@ -23,6 +23,7 @@ public class PlayerController:MonoBehaviour
 		MovementCheck ();
 	}
 
+	//Update player movement
 	public void MovementCheck ()
 	{
 		inputObj.CkeckInput (agent);
@@ -36,6 +37,7 @@ public class PlayerController:MonoBehaviour
 		}
 	}
 
+	//before start chopping veggies update staes and index
 	void PrepareChopping ()
 	{
 		if (pickupChopIndex < pickUps.Count) {
@@ -46,6 +48,7 @@ public class PlayerController:MonoBehaviour
 		}
 	}
 
+	//before throwing veggies to dustbin prepare
 	void PrepareCleaning ()
 	{
 		if (pickUps.Count > 0) {
@@ -54,6 +57,7 @@ public class PlayerController:MonoBehaviour
 		}
 	}
 
+	//detect kind of player interacting with
 	private void OnTriggerStay (Collider colObj)
 	{
 		if (Input.GetKeyDown (inputObj.pickUpInput)) {
@@ -70,6 +74,7 @@ public class PlayerController:MonoBehaviour
 		}
 	}
 
+	//when chopping starts freez player
 	private IEnumerator StartChopping (PickUp curPickup)
 	{
 		yield return new WaitForSecondsRealtime (curPickup.remainingTime);
@@ -77,7 +82,8 @@ public class PlayerController:MonoBehaviour
 		inputObj.isFreezed = false;
 		pickupChopIndex++;
 	}
-
+	
+	//Add new veggie
 	public void AddPickUp (PickUp newVeggie)
 	{
 		if (Input.GetKeyDown ((inputObj.pickUpInput))) {
@@ -90,6 +96,7 @@ public class PlayerController:MonoBehaviour
 		}
 	}
 
+	//When player pick up any reward
 	public void AddPowerUp (PowerUpType type)
 	{
 	}
