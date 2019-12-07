@@ -97,6 +97,23 @@ public class PlayerController:MonoBehaviour
 		}
 	}
 
+	void PrepareToSearve (PlayerReward result)
+	{
+		switch (result) {
+		case PlayerReward.Ideal:
+			Debug.LogError ("Ideal !");
+			break;
+		case PlayerReward.Reward:
+			Debug.LogError ("Rewarded !");
+			break;
+		case PlayerReward.Panelty:
+			Debug.LogError ("Penality !");
+			break;
+		default:
+			break;
+		}
+	}
+
 	//detect kind of player interacting with
 	private void OnTriggerStay (Collider colObj)
 	{
@@ -110,6 +127,8 @@ public class PlayerController:MonoBehaviour
 				PrepareCleaning ();
 			} else if (colObj.CompareTag ("PowerUp")) {			
 				PrepareCleaning ();
+			} else if (colObj.CompareTag ("Customer")) {			
+				PrepareToSearve (colObj.GetComponent<CustomerContoller> ().cusObj.VerifySalad (PickUps));
 			}
 		}
 	}
