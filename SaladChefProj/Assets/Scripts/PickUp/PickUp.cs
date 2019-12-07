@@ -7,7 +7,7 @@ using System;
 public class PickUpVeggie
 {
 	public float choppingTime;
-	public Veggies name;
+	public Veggies vName;
 }
 
 public enum Veggies
@@ -42,4 +42,11 @@ public class PickUp:PickUpVeggie
 	public  void UpdateState (State newState)
 	{
 	}
+}
+
+[Serializable]
+public class PickUpContainer
+{
+	public Transform transContainer;
+	public PlayerName pName;
 }

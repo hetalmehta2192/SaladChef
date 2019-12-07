@@ -3,26 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.AI;
-public PlayerName{A,B}
+using UnityEngine.UI;
+
+public enum PlayerName
+{
+	Red,
+	Blue
+}
+
 [Serializable]
 public class PlayerController:MonoBehaviour
 {
+	private NavMeshAgent agent;
+	private int pickupChopIndex;
 	public PlayerName pName;
 	public Score scoreObj;
 	public InputManager inputObj;
 	public PlayerTimer timerObj;
 	public List<PickUp> pickUps;
-	private NavMeshAgent agent;
-	private int pickupChopIndex;
+
+	public List<PickUp> PickUps {
+		get {
+			if (pickUps == null) {
+				pickUps = new List<PickUp> ();
+			}
+			return pickUps;
+		}
+		set {
+			pickUps = value;
+		}
+	}
+
+	private static int maxPickUps = 2;
+
+	public delegate void PickToContainer (PlayerName pName, Veggies vName);
+
+	public delegate void CleanContainer (PlayerName pName);
+
+	public static event PickToContainer dAddPickToContainer;
+	public static event CleanContainer dRemovePickToContainer;
 
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
+		scoreObj.CurScore = 0;
+		InvokeRepeating ("StartCountdown", 1f, 1f);
 	}
 
 	void Update ()
 	{
 		MovementCheck ();
+	}
+
+	public void StartCountdown ()
+	{
+		timerObj.CurTimerValue++;
 	}
 
 	//Update player movement
@@ -33,17 +68,19 @@ public class PlayerController:MonoBehaviour
 
 	void PreparePickup (Collider colObj)
 	{
-		PickUp newVeggie = colObj.GetComponent<GeneratePickUp> ().GetPickUp ();
-		if (newVeggie != null) {
-			AddPickUp (newVeggie);
+		if (PickUps.Count < maxPickUps) {
+			PickUp newVeggie = colObj.GetComponent<GeneratePickUp> ().GetPickUp ();
+			if (newVeggie != null) {
+				AddPickUp (newVeggie);
+			}
 		}
 	}
 
 	//before start chopping veggies update staes and index
 	void PrepareChopping ()
 	{
-		if (pickupChopIndex < pickUps.Count) {
-			PickUp curPickup = pickUps [pickupChopIndex];
+		if (pickupChopIndex < PickUps.Count) {
+			PickUp curPickup = PickUps [pickupChopIndex];
 			curPickup.curState = PickUp.State.Chopping;
 			inputObj.isFreezed = true;
 			StartCoroutine (StartChopping (curPickup));
@@ -53,9 +90,10 @@ public class PlayerController:MonoBehaviour
 	//before throwing veggies to dustbin prepare
 	void PrepareCleaning ()
 	{
-		if (pickUps.Count > 0) {
-			pickUps.RemoveAt (0);
+		if (PickUps.Count > 0) {
+			PickUps.RemoveAt (0);
 			pickupChopIndex--;
+			dRemovePickToContainer (pName);
 		}
 	}
 
@@ -66,14 +104,11 @@ public class PlayerController:MonoBehaviour
 			//veggie pickup
 			if (colObj.CompareTag ("PickUp")) {
 				PreparePickup (colObj);
-			}
-			if (colObj.CompareTag ("Board")) {
+			} else if (colObj.CompareTag ("Board")) {
 				PrepareChopping ();
-			}
-			if (colObj.CompareTag ("Bin")) {			
+			} else if (colObj.CompareTag ("Bin")) {			
 				PrepareCleaning ();
-			}
-			if (colObj.CompareTag ("PowerUp")) {			
+			} else if (colObj.CompareTag ("PowerUp")) {			
 				PrepareCleaning ();
 			}
 		}
@@ -90,14 +125,10 @@ public class PlayerController:MonoBehaviour
 	
 	//Add new veggie
 	public void AddPickUp (PickUp newVeggie)
-	{
-		if (Input.GetKeyDown ((inputObj.pickUpInput))) {
-			if (pickUps == null) {
-				pickUps = new List<PickUp> ();
-			}
-			if (!pickUps.Contains (newVeggie)) {
-				pickUps.Add (newVeggie);
-			}
+	{		
+		if (!PickUps.Contains (newVeggie)) {
+			PickUps.Add (newVeggie);
+			dAddPickToContainer (pName, newVeggie.vName);
 		}
 	}
 

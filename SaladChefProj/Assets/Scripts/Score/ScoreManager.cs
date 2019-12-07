@@ -1,10 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine.UI;
 
 [Serializable]
 public class Score
 {
-	public float m_curScore;
+	private float m_curScore;
+	public Text scoreTxt;
+
+	public float CurScore {
+		get {
+			return m_curScore;
+		}
+		set {
+			m_curScore = value;
+			scoreTxt.text = m_curScore.ToString ();
+		}
+	}
 }
