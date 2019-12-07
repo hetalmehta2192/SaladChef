@@ -11,7 +11,7 @@ public class Customer
 	public float timeCounterSpeed;
 	private float totalWaitTime = 1000f;
 	private float remainingWaitTime;
-	private float angerRatio = 0.01f;
+	private float angerRatio = 0.001f;
 	private float angerLevel = 1f;
 	private bool isSatisfied = false, isLeft = false;
 	[SerializeField]
@@ -42,8 +42,10 @@ public class Customer
 				if (imgBarUI != null) {
 					imgBarUI.fillAmount = remainingWaitTime / totalWaitTime;
 				}
-			} else
+			} else {
 				IsLeft = true;
+				GivePenaltyPlayer ();
+			}
 		}
 	}
 
@@ -80,9 +82,9 @@ public class Customer
 				return PlayerReward.Panelty;
 			}
 		}
+		isSatisfied = true;
 		if (remainingWaitTime >= totalWaitTime * 0.7f) {
 			//Reward player
-			//ManagePickup.pickupObj.NewPickup (p, Pickup.PickupType.power, Pickup.PickupName.none, Pickup.getRandomPower ());
 			return PlayerReward.Reward;
 		}
 		return PlayerReward.Ideal;

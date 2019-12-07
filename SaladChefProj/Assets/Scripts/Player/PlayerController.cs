@@ -82,7 +82,7 @@ public class PlayerController:MonoBehaviour
 		if (pickupChopIndex < PickUps.Count) {
 			PickUp curPickup = PickUps [pickupChopIndex];
 			curPickup.curState = PickUp.State.Chopping;
-			inputObj.isFreezed = true;
+			inputObj.IsFreezed = true;
 			StartCoroutine (StartChopping (curPickup));
 		}
 	}
@@ -136,9 +136,16 @@ public class PlayerController:MonoBehaviour
 	//when chopping starts freez player
 	private IEnumerator StartChopping (PickUp curPickup)
 	{
-		yield return new WaitForSecondsRealtime (curPickup.remainingTime);
+		while (curPickup.remainingTime > 0) {
+			curPickup.remainingTime -= Time.deltaTime;
+			//inputObj.barUI.fillAmount =
+			inputObj.barUI.fillAmount = curPickup.remainingTime / curPickup.choppingTime;
+			Debug.LogError (curPickup.remainingTime + " fill : " + inputObj.barUI.fillAmount);
+			yield return new WaitForEndOfFrame ();
+		}
+		//yield return new WaitForSecondsRealtime (curPickup.remainingTime);
 		curPickup.curState = PickUp.State.Chopped;
-		inputObj.isFreezed = false;
+		inputObj.IsFreezed = false;
 		pickupChopIndex++;
 	}
 	
