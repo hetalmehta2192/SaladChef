@@ -12,7 +12,8 @@ public class PickUpController:MonoBehaviour
 	private void Start ()
 	{
 		PlayerController.dAddPickToContainer += AddPickUp;
-		PlayerController.dRemovePickToContainer += RemovePickUp;
+		PlayerController.dRemovePickFromContainer += RemovePickUp;
+		PlayerController.dRemoveAllPickFromContainer += RemoveAllPickUp;
 	}
 
 	public void AddPickUp (PlayerName pName, Veggies vName)
@@ -30,6 +31,17 @@ public class PickUpController:MonoBehaviour
 		PickUpContainer container = containerObj.Find (x => x.pName == pName);
 		if (container != null) {
 			Destroy (container.transContainer.GetChild (0).gameObject);
+		}
+	}
+
+	public void RemoveAllPickUp (PlayerName pName)
+	{
+		PickUpContainer container = containerObj.Find (x => x.pName == pName);
+		if (container != null) {
+			int cnt = container.transContainer.childCount;
+			foreach (Transform item in container.transContainer.transform) {
+				Destroy (item.gameObject);
+			}
 		}
 	}
 

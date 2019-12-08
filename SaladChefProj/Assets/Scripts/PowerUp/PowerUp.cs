@@ -13,7 +13,7 @@ public class PowerUp:MonoBehaviour
 	{
 		m_pName = pName;
 		m_powerType = powerType;
-		textObj.text = m_powerType.ToString ();
+		textObj.text = "" + m_powerType;
 	}
 
 	private void OnTriggerStay (Collider colObj)

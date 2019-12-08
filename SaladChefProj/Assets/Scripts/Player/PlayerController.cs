@@ -41,7 +41,8 @@ public class PlayerController:MonoBehaviour
 	public delegate void CleanContainer (PlayerName pName);
 
 	public static event PickToContainer dAddPickToContainer;
-	public static event CleanContainer dRemovePickToContainer;
+	public static event CleanContainer dRemovePickFromContainer;
+	public static event CleanContainer dRemoveAllPickFromContainer;
 
 	public delegate void SpawnPowerUp (PlayerName pName);
 
@@ -83,7 +84,7 @@ public class PlayerController:MonoBehaviour
 	//before start chopping veggies update staes and index
 	void PrepareChopping ()
 	{
-		if (pickupChopIndex < PickUps.Count) {
+		if (pickupChopIndex < PickUps.Count && !inputObj.IsFreezed) {
 			PickUp curPickup = PickUps [pickupChopIndex];
 			curPickup.curState = PickUp.State.Chopping;
 			inputObj.IsFreezed = true;
@@ -97,7 +98,8 @@ public class PlayerController:MonoBehaviour
 		if (PickUps.Count > 0) {
 			PickUps.RemoveAt (0);
 			pickupChopIndex--;
-			dRemovePickToContainer (pName);
+			dRemovePickFromContainer (pName);
+			GivePunishment ();
 		}
 	}
 
@@ -106,9 +108,11 @@ public class PlayerController:MonoBehaviour
 		switch (result) {
 		case PlayerReward.Ideal:
 			Debug.Log ("Ideal !");
+			GivePoints ();
 			break;
 		case PlayerReward.Reward:
 			Debug.Log ("Rewarded !");
+			GivePoints ();
 			dSpawnPowerUp (pName);
 			break;
 		case PlayerReward.Panelty:
@@ -121,10 +125,14 @@ public class PlayerController:MonoBehaviour
 
 	void ResetPlayer ()
 	{
-		for (int i = PickUps.Count - 1; i >= 0; i--) {
-			dRemovePickToContainer (pName);
-		}
+		PickUps = new List<PickUp> ();
+		dRemoveAllPickFromContainer (pName);
 		pickupChopIndex = 0;
+	}
+
+	void GivePoints ()
+	{
+		scoreObj.CurScore += 50f;
 	}
 
 	public void GivePunishment ()
@@ -162,6 +170,7 @@ public class PlayerController:MonoBehaviour
 		curPickup.curState = PickUp.State.Chopped;
 		inputObj.IsFreezed = false;
 		pickupChopIndex++;
+		Debug.Log ("pickupChopIndex : " + pickupChopIndex);
 	}
 	
 	//Add new veggie
@@ -171,10 +180,5 @@ public class PlayerController:MonoBehaviour
 			PickUps.Add (newVeggie);
 			dAddPickToContainer (pName, newVeggie.vName);
 		}
-	}
-
-	//When player pick up any reward
-	public void AddPowerUp (PowerUpType type)
-	{
 	}
 }

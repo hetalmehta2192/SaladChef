@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class PowerUpSpawnner:MonoBehaviour
 {
-	public GameObject powerUpPrefab;
+	[SerializeField]
+	private GameObject powerUpPrefab;
 
 	private void Start ()
 	{
@@ -13,9 +14,9 @@ public class PowerUpSpawnner:MonoBehaviour
 
 	public void GetRandomPower (PlayerName pName)
 	{
-		PowerUpType powerType = (PowerUpType)UnityEngine.Random.Range (0, 4);
+		PowerUpType powerType = (PowerUpType)UnityEngine.Random.Range (0, 2);
 		GameObject powerObj = Instantiate (powerUpPrefab);
-		powerObj.transform.position = new Vector3 (UnityEngine.Random.Range (-1, 1), UnityEngine.Random.Range (-1, 1));
+		powerObj.transform.position = new Vector3 (UnityEngine.Random.Range (-1f, 1f), 1f, UnityEngine.Random.Range (-1f, 1f));
 		PowerUp obj = powerObj.GetComponent <PowerUp> ();
 		obj.SetPowerUp (powerType, pName);
 	}

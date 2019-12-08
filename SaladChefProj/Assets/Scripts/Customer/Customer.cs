@@ -7,11 +7,22 @@ using UnityEngine.UI;
 [Serializable]
 public class Customer
 {
+	public static int totalCusLeft = 0;
+
+	public static int TotalCusLeft {
+		get {
+			return totalCusLeft;
+		}
+		set {
+			totalCusLeft = value;
+		}
+	}
+
 	public List<Veggies> Order;
 	public float timeCounterSpeed;
 	private float totalWaitTime = 1000f;
 	private float remainingWaitTime;
-	private float angerRatio = 0.001f;
+	private float angerRatio = 0.005f;
 	private float angerLevel = 1f;
 	private bool isSatisfied = false, m_isLeft = false;
 	[SerializeField]
@@ -35,24 +46,31 @@ public class Customer
 		get{ return remainingWaitTime; }
 		set {
 			remainingWaitTime = value;
-			if (remainingWaitTime > 0) {					 
-				if (imgBarUI != null) {
-					imgBarUI.fillAmount = remainingWaitTime / totalWaitTime;
-				}
-			} else {
-				IsLeft = true;
-				if (!IsSatisfied)
-					GivePenaltyPlayer ();
-			}
+			PostEffectLifeTime ();
 		}
 	}
 
-	public void updateLifeTime ()
+	void PostEffectLifeTime ()
+	{
+		if (remainingWaitTime > 0) {
+			if (imgBarUI != null) {
+				imgBarUI.fillAmount = remainingWaitTime / totalWaitTime;
+			}
+		} else {
+			IsLeft = true;
+			if (!IsSatisfied)
+				GivePenaltyPlayer ();
+			totalCusLeft++;
+			GameObject.FindGameObjectWithTag ("GameController").SendMessage ("UpdateCustomerLeftCnt");
+		}
+	}
+
+	public void UpdateLifeTime ()
 	{			
 		LifeTime -= angerRatio * angerLevel / Time.deltaTime;
 	}
 
-	public void init ()
+	public void Init ()
 	{
 		totalWaitTime *= Order.Count;
 		remainingWaitTime = totalWaitTime;

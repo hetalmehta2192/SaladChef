@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+	private int totalCustomerCnt;
+
 	void Start ()
 	{
-		
+		totalCustomerCnt = GameObject.FindGameObjectsWithTag ("Customer").Length;
 	}
 	
 	// Update is called once per frame
@@ -15,15 +17,10 @@ public class GameController : MonoBehaviour
 		
 	}
 
-	public void RewardGeneration (PlayerController player)
+	public void UpdateCustomerLeftCnt ()
 	{
-	}
+		if (Customer.totalCusLeft >= totalCustomerCnt) {
 
-	public void PenaltyGeneration (PlayerController player)
-	{
-	}
-
-	public void PenaltyGenerationAllPlayer ()
-	{
+		}
 	}
 }

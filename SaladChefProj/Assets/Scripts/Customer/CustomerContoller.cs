@@ -10,14 +10,14 @@ public class CustomerContoller : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		cusObj.init ();
+		cusObj.Init ();
 		StartCoroutine (Timer ());
 	}
 
 	IEnumerator Timer ()
 	{
 		while (!(cusObj.IsLeft || cusObj.IsSatisfied)) {
-			cusObj.updateLifeTime ();
+			cusObj.UpdateLifeTime ();
 			yield return new WaitForEndOfFrame ();
 		}
 		cusObj.LifeTime = 0;
