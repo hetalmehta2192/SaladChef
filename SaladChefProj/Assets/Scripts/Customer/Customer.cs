@@ -13,7 +13,7 @@ public class Customer
 	private float remainingWaitTime;
 	private float angerRatio = 0.001f;
 	private float angerLevel = 1f;
-	private bool isSatisfied = false, isLeft = false;
+	private bool isSatisfied = false, m_isLeft = false;
 	[SerializeField]
 	private Image imgBarUI;
 	[SerializeField]
@@ -25,12 +25,9 @@ public class Customer
 	}
 
 	public bool IsLeft {
-		get{ return isLeft; }
+		get{ return m_isLeft; }
 		set {
-			isLeft = value;
-//				if (!IsSatisfied)
-//					GameClass.objGameClass.Penalty ();
-			//		GameClass.objGameClass.updateGameStatus ();
+			m_isLeft = value;
 		}
 	}
 
@@ -44,7 +41,8 @@ public class Customer
 				}
 			} else {
 				IsLeft = true;
-				GivePenaltyPlayer ();
+				if (!IsSatisfied)
+					GivePenaltyPlayer ();
 			}
 		}
 	}
@@ -82,12 +80,21 @@ public class Customer
 				return PlayerReward.Panelty;
 			}
 		}
-		isSatisfied = true;
+		IsSatisfied = true;
 		if (remainingWaitTime >= totalWaitTime * 0.7f) {
 			//Reward player
 			return PlayerReward.Reward;
 		}
 		return PlayerReward.Ideal;
+	}
+
+	//Give Penalty to all player if customer left angry
+	void GivePenaltyPlayer ()
+	{
+		foreach (var item in GameObject.FindGameObjectsWithTag ("Player")) {
+			PlayerController playerObj = item.GetComponent <PlayerController> ();
+			playerObj.GivePunishment ();
+		}
 	}
 }
 

@@ -43,6 +43,10 @@ public class PlayerController:MonoBehaviour
 	public static event PickToContainer dAddPickToContainer;
 	public static event CleanContainer dRemovePickToContainer;
 
+	public delegate void SpawnPowerUp (PlayerName pName);
+
+	public static event SpawnPowerUp dSpawnPowerUp;
+
 	void Start ()
 	{
 		agent = GetComponent<NavMeshAgent> ();
@@ -101,17 +105,31 @@ public class PlayerController:MonoBehaviour
 	{
 		switch (result) {
 		case PlayerReward.Ideal:
-			Debug.LogError ("Ideal !");
+			Debug.Log ("Ideal !");
 			break;
 		case PlayerReward.Reward:
-			Debug.LogError ("Rewarded !");
+			Debug.Log ("Rewarded !");
+			dSpawnPowerUp (pName);
 			break;
 		case PlayerReward.Panelty:
-			Debug.LogError ("Penality !");
-			break;
-		default:
+			Debug.Log ("Penality !");
+			GivePunishment ();
 			break;
 		}
+		ResetPlayer ();
+	}
+
+	void ResetPlayer ()
+	{
+		for (int i = PickUps.Count - 1; i >= 0; i--) {
+			dRemovePickToContainer (pName);
+		}
+		pickupChopIndex = 0;
+	}
+
+	public void GivePunishment ()
+	{
+		scoreObj.CurScore -= 10f;
 	}
 
 	//detect kind of player interacting with
@@ -138,12 +156,9 @@ public class PlayerController:MonoBehaviour
 	{
 		while (curPickup.remainingTime > 0) {
 			curPickup.remainingTime -= Time.deltaTime;
-			//inputObj.barUI.fillAmount =
 			inputObj.barUI.fillAmount = curPickup.remainingTime / curPickup.choppingTime;
-			Debug.LogError (curPickup.remainingTime + " fill : " + inputObj.barUI.fillAmount);
 			yield return new WaitForEndOfFrame ();
 		}
-		//yield return new WaitForSecondsRealtime (curPickup.remainingTime);
 		curPickup.curState = PickUp.State.Chopped;
 		inputObj.IsFreezed = false;
 		pickupChopIndex++;

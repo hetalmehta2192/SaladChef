@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 33705611504011082}
   - component: {fileID: 65524392004954534}
   - component: {fileID: 23735693786856200}
-  - component: {fileID: 114819997945873912}
+  - component: {fileID: 114237641449713144}
   m_Layer: 0
   m_Name: pickPrefab
   m_TagString: PickUp
@@ -168,12 +168,10 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1272513817650644}
-  m_Text: 'Power
-
-    Speed'
+  m_Text: Speed
   m_OffsetZ: 0
-  m_CharacterSize: 0.27
-  m_LineSpacing: 1
+  m_CharacterSize: 0.28
+  m_LineSpacing: 0
   m_Anchor: 4
   m_Alignment: 1
   m_TabSize: 4
@@ -184,7 +182,7 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114819997945873912
+--- !u!114 &114237641449713144
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -192,11 +190,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1668039707516130}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2178d18b5f43ec24c950c018d57d7c9d, type: 3}
+  m_Script: {fileID: 11500000, guid: 941734cb8ad9dc74e83c1fd476895dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupObj:
-    pickupName: 0
-    team: 0
-    type_Pickup: 0
-    type_Powerup: 0
+  textObj: {fileID: 102905109710226390}

@@ -11,11 +11,15 @@ public class CustomerContoller : MonoBehaviour
 	void Start ()
 	{
 		cusObj.init ();
+		StartCoroutine (Timer ());
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+	IEnumerator Timer ()
 	{
-		cusObj.updateLifeTime ();
+		while (!(cusObj.IsLeft || cusObj.IsSatisfied)) {
+			cusObj.updateLifeTime ();
+			yield return new WaitForEndOfFrame ();
+		}
+		cusObj.LifeTime = 0;
 	}
 }
