@@ -31,10 +31,10 @@ public class PowerUp:MonoBehaviour
 				playerObj.inputObj.moveSpeed += 1f;
 				break;
 			case PowerUpType.ScoreUp:
-				playerObj.scoreObj.CurScore += 50f;
+				playerObj.scoreObj.CurScore += 50;
 				break;
 			case PowerUpType.TimeUp:
-				playerObj.timerObj.CurTimerValue -= 10;
+				playerObj.timerObj.CurTimerValue += 20;
 				break;
 			}
 			Destroy (gameObject);

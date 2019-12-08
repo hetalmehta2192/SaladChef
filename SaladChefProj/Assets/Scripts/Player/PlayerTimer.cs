@@ -8,7 +8,8 @@ using UnityEngine.UI;
 [Serializable]
 public class PlayerTimer
 {
-	private int m_curTimerValue;
+	private int m_curTimerValue = 50;
+	//250;
 	public Text timerTxt;
 
 	public int CurTimerValue {

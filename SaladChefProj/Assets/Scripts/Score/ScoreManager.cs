@@ -4,10 +4,10 @@ using UnityEngine.UI;
 [Serializable]
 public class Score
 {
-	private float m_curScore;
+	private int m_curScore;
 	public Text scoreTxt;
 
-	public float CurScore {
+	public int CurScore {
 		get {
 			return m_curScore;
 		}

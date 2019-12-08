@@ -12,6 +12,12 @@ public class CustomerContoller : MonoBehaviour
 	{
 		cusObj.Init ();
 		StartCoroutine (Timer ());
+		PlayerController.CheckWinner += StopCustomer;
+	}
+
+	void StopCustomer ()
+	{
+		StopAllCoroutines ();
 	}
 
 	IEnumerator Timer ()

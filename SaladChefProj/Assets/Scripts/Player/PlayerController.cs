@@ -40,13 +40,21 @@ public class PlayerController:MonoBehaviour
 
 	public delegate void CleanContainer (PlayerName pName);
 
+	public delegate void SpawnPowerUp (PlayerName pName);
+
+	public delegate void DeclareWinner ();
+
 	public static event PickToContainer dAddPickToContainer;
 	public static event CleanContainer dRemovePickFromContainer;
 	public static event CleanContainer dRemoveAllPickFromContainer;
-
-	public delegate void SpawnPowerUp (PlayerName pName);
-
 	public static event SpawnPowerUp dSpawnPowerUp;
+	public static event DeclareWinner CheckWinner;
+
+	void Awake ()
+	{
+		CheckWinner -= UpdateWinner;
+		CheckWinner += UpdateWinner;
+	}
 
 	void Start ()
 	{
@@ -60,9 +68,19 @@ public class PlayerController:MonoBehaviour
 		MovementCheck ();
 	}
 
+	void UpdateWinner ()
+	{		
+		GameController.controllerObj.UpdatePlayerScore (pName, scoreObj.CurScore);
+		CancelInvoke ();
+	}
+
 	public void StartCountdown ()
 	{
-		timerObj.CurTimerValue++;
+		timerObj.CurTimerValue--;
+		if (timerObj.CurTimerValue <= 0) {
+			GameController.controllerObj.PlayerLifeTime = true;
+			CheckWinner ();
+		}
 	}
 
 	//Update player movement
@@ -132,12 +150,12 @@ public class PlayerController:MonoBehaviour
 
 	void GivePoints ()
 	{
-		scoreObj.CurScore += 50f;
+		scoreObj.CurScore += 50;
 	}
 
 	public void GivePunishment ()
 	{
-		scoreObj.CurScore -= 10f;
+		scoreObj.CurScore -= 10;
 	}
 
 	//detect kind of player interacting with

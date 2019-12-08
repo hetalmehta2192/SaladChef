@@ -57,6 +57,9 @@ public class Customer
 				imgBarUI.fillAmount = remainingWaitTime / totalWaitTime;
 			}
 		} else {
+			if (imgBarUI != null) {
+				imgBarUI.fillAmount = 0;
+			}
 			IsLeft = true;
 			if (!IsSatisfied)
 				GivePenaltyPlayer ();
